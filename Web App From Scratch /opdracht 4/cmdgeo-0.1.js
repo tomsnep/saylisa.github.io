@@ -1,6 +1,6 @@
 /***
 * cmdaan.js
-*   Bevat functies voor CMDAan stijl geolocatie welke uitgelegd
+*   Bevat functies voor CMDAan stijl geolocation welke uitgelegd
 *   zijn tijdens het techniek college in week 5.
 *
 *   Author: J.P. Sturkenboom <j.p.sturkenboom@hva.nl>
@@ -10,14 +10,14 @@
 */
 
 // Variable declaration
-var SANDBOX = "SANDBOX";
-var LINEAIR = "LINEAIR";
-var GPS_AVAILABLE = 'GPS_AVAILABLE';
-var GPS_UNAVAILABLE = 'GPS_UNAVAILABLE';
+var sandBox = "SANDBOX";
+var linear = "LINEAR";
+var gpsAvailable = 'GPS_AVAILABLE';
+var gpsUnavailable = 'GPS_UNAVAILABLE';
 var POSITION_UPDATED = 'POSITION_UPDATED';
 var REFRESH_RATE = 1000;
 var currentPosition = currentPositionMarker = customDebugging = debugId = map = interval =intervalCounter = updateMap = false;
-var locatieRij = markerRij = [];
+var locationRij = markerRij = [];
 
 // Event functies - bron: http://www.nczonline.net/blog/2010/03/09/custom-events-in-javascript/ Copyright (c) 2010 Nicholas C. Zakas. All rights reserved. MIT License
 // Gebruik: ET.addListener('foo', handleEvent); ET.fire('event_name'); ET.removeListener('foo', handleEvent);
@@ -29,10 +29,10 @@ this._listeners[a],d=0,e=b.length;d<e;d++)if(b[d]===c){b.splice(d,1);break}}}; v
 function init(){
     debug_message("Controleer of GPS beschikbaar is...");
 
-    ET.addListener(GPS_AVAILABLE, _start_interval);
-    ET.addListener(GPS_UNAVAILABLE, function(){debug_message('GPS is niet beschikbaar.')});
+    ET.addListener(gpsAvailable, _start_interval);
+    ET.addListener(gpsUnavailable, function(){debug_message('GPS is niet beschikbaar.')});
 
-    (geo_position_js.init())?ET.fire(GPS_AVAILABLE):ET.fire(GPS_UNAVAILABLE);
+    (geo_position_js.init())?ET.fire(gpsAvailable):ET.fire(gpsUnavailable);
 }
 
 // Start een interval welke op basis van REFRESH_RATE de positie updated
@@ -56,27 +56,27 @@ function _set_position(position){
     debug_message(intervalCounter+" positie lat:"+position.coords.latitude+" long:"+position.coords.longitude);
 }
 
-// Controleer de locaties en verwijs naar een andere pagina als we op een locatie zijn
+// Controleer de locations en verwijs naar een andere pagina als we op een location zijn
 function _check_locations(event){
     // Liefst buiten google maps om... maar helaas, ze hebben alle coole functies
-    for (var i = 0; i < locaties.length; i++) {
-        var locatie = {coords:{latitude: locaties[i][3],longitude: locaties[i][4]}};
+    for (var i = 0; i < locations.length; i++) {
+        var location = {coords:{latitude: locations[i][3],longitude: locations[i][4]}};
 
-        if(_calculate_distance(locatie, currentPosition)<locaties[i][2]){
+        if(_calculate_distance(location, currentPosition)<locations[i][2]){
 
-            // Controle of we NU op die locatie zijn, zo niet gaan we naar de betreffende page
-            if(window.location!=locaties[i][1] && localStorage[locaties[i][0]]=="false"){
-                // Probeer local storage, als die bestaat incrementeer de locatie
+            // Controle of we NU op die location zijn, zo niet gaan we naar de betreffende page
+            if(window.location!=locations[i][1] && localStorage[locations[i][0]]=="false"){
+                // Probeer local storage, als die bestaat incrementeer de location
                 try {
-                    (localStorage[locaties[i][0]]=="false")?localStorage[locaties[i][0]]=1:localStorage[locaties[i][0]]++;
+                    (localStorage[locations[i][0]]=="false")?localStorage[locations[i][0]]=1:localStorage[locations[i][0]]++;
                 } catch(error) {
                     debug_message("Localstorage kan niet aangesproken worden: "+error);
                 }
 
 // TODO: Animeer de betreffende marker
 
-                window.location = locaties[i][1];
-                debug_message("Speler is binnen een straal van "+ locaties[i][2] +" meter van "+locaties[i][0]);
+                window.location = locations[i][1];
+                debug_message("Speler is binnen een straal van "+ locations[i][2] +" meter van "+locations[i][0]);
             }
         }
     }
@@ -111,33 +111,33 @@ function generate_map(myOptions, canvasId){
     var routeList = [];
     // Voeg de markers toe aan de map afhankelijk van het tourtype
     debug_message("Locaties intekenen, tourtype is: "+tourType);
-    for (var i = 0; i < locaties.length; i++) {
+    for (var i = 0; i < locations.length; i++) {
 
-        // Met kudos aan Tomas Harkema, probeer local storage, als het bestaat, voeg de locaties toe
+        // Met kudos aan Tomas Harkema, probeer local storage, als het bestaat, voeg de locations toe
         try {
-            (localStorage.visited==undefined||isNumber(localStorage.visited))?localStorage[locaties[i][0]]=false:null;
+            (localStorage.visited==undefined||isNumber(localStorage.visited))?localStorage[locations[i][0]]=false:null;
         } catch (error) {
             debug_message("Localstorage kan niet aangesproken worden: "+error);
         }
 
-        var markerLatLng = new google.maps.LatLng(locaties[i][3], locaties[i][4]);
+        var markerLatLng = new google.maps.LatLng(locations[i][3], locations[i][4]);
         routeList.push(markerLatLng);
 
         markerRij[i] = {};
-        for (var attr in locatieMarker) {
-            markerRij[i][attr] = locatieMarker[attr];
+        for (var attr in locationMarker) {
+            markerRij[i][attr] = locationMarker[attr];
         }
-        markerRij[i].scale = locaties[i][2]/3;
+        markerRij[i].scale = locations[i][2]/3;
 
         var marker = new google.maps.Marker({
             position: markerLatLng,
             map: map,
             icon: markerRij[i],
-            title: locaties[i][0]
+            title: locations[i][0]
         });
     }
 // TODO: Kleur aanpassen op het huidige punt van de tour
-    if(tourType == LINEAIR){
+    if(tourType == linear){
         // Trek lijnen tussen de punten
         debug_message("Route intekenen");
         var route = new google.maps.Polyline({
@@ -151,7 +151,7 @@ function generate_map(myOptions, canvasId){
 
     }
 
-    // Voeg de locatie van de persoon door
+    // Voeg de location van de persoon door
     currentPositionMarker = new google.maps.Marker({
         position: kaartOpties.center,
         map: map,
