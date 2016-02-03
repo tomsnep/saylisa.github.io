@@ -10,6 +10,7 @@
 */
 
 (function(){
+    'use strict';
 
     // Variable declaration
     var sandBox = "SANDBOX";
