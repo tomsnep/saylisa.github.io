@@ -1,28 +1,31 @@
+// maak een namespace om conflicten te voorkomen
+var webApp = webApp || {}; 
+
 // IIFE (self invoking function)
 (function(){
     // use strict modus aanzetten -> stuurt geen var door naar globale scope
     'use strict';
     
     // Object Literal app
-    var app = {
+    webApp.app = {
         // method: init
         init: function(){
-            routes.init();
+            webApp.routes.init();
         }
     };
     
     // Object Literal routes
-    var routes = {
+    webApp.routes = {
         init: function(){ 
             // on hashchange roept sections.toggle aan
-            window.addEventListener("hashchange",sections.toggle);
+            window.addEventListener("hashchange",webApp.sections.toggle);
             // voert functie uit bij window load
-            window.addEventListener("load", sections.toggle);
+            window.addEventListener("load", webApp.sections.toggle);
         }
     };
     
     // Object Literal sections
-    var sections = {
+    webApp.sections = {
         toggle: function(route){
             var sections = document.querySelectorAll(".togglesection"),
                 route = window.location.hash;
@@ -42,6 +45,6 @@
         }
     };
     
-    app.init();
+    webApp.app.init();
 
 })();
