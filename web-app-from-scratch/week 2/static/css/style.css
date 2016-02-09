@@ -39,3 +39,17 @@ li{
 .inactive{
     display:none;
 }
+
+#template{
+    padding:0.5em;
+}
+
+.name, .url, .adress{
+    display:block;
+}
+
+.name{
+    font-weight: 900;
+    font-size: 1.2em;
+    margin-top: 1em;
+}

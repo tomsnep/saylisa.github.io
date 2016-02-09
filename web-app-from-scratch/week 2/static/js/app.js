@@ -1,10 +1,11 @@
+// use strict modus aanzetten -> stuurt geen var door naar globale scope
+'use strict';
+
 // maak een namespace om conflicten te voorkomen
 var webApp = webApp || {}; 
 
 // IIFE (self invoking function)
 (function(){
-    // use strict modus aanzetten -> stuurt geen var door naar globale scope
-    'use strict';
     
     // Object Literal app
     webApp.app = {
@@ -16,32 +17,20 @@ var webApp = webApp || {};
     
     // Object Literal routes
     webApp.routes = {
-        init: function(){ 
-            // on hashchange roept sections.toggle aan
-            window.addEventListener("hashchange",webApp.sections.toggle);
-            // voert functie uit bij window load
-            window.addEventListener("load", webApp.sections.toggle);
-        }
-    };
-    
-    // Object Literal sections
-    webApp.sections = {
-        toggle: function(route){
-            var sections = document.querySelectorAll(".togglesection"),
-                route = window.location.hash;
-
-            for (var i = 0; i < sections.length; i++) {
-                // add inactive aan alle sections
-                sections[i].classList.add('inactive');
+        init: function(){  
+            document.querySelector('#musea').classList.add('inactive');
             
-                // if geen # in de link
-                if (!route) {
-                    sections[0].classList.remove('inactive');
-                
-                } else if(window.location.hash === "#" + sections[i].id) {
-                    sections[i].classList.remove('inactive');
+            routie({
+                'startscreen': function(){
+                    document.querySelector('#startscreen').classList.remove('inactive');
+                    document.querySelector('#musea').classList.add('inactive');
+                },
+                'musea': function(){
+                    document.querySelector('#musea').classList.remove('inactive');
+                    document.querySelector('#startscreen').classList.add('inactive');
                 }
-            }  
+                
+            });
         }
     };
     
@@ -51,8 +40,7 @@ var webApp = webApp || {};
 
 
 
-(function(){
-    'use strict';
+var getData = (function(){
     
     aja()
     .method('get')
@@ -61,6 +49,34 @@ var webApp = webApp || {};
     .on('success', function(data){
         var json = data;
         console.log(json);
+        
+        for (var i = 0; i < json.length; i++) {
+            
+            var templating = {
+                title: "Musea in Parijs",
+                museaList: [
+                    {
+                        name: json[0].name,
+                        url: json[0].url,
+                        address: json[0].address
+                    },
+                    {
+                        name: json[1].name,
+                        url: json[1].url,
+                        address: json[1].address
+                    },
+                    {
+                        name: json[2].name,
+                        url: json[2].url,
+                        address: json[2].address
+                    }
+                ]
+            };
+            
+        }
+        
+        Transparency.render(document.getElementById('template'), templating); 
+        
     })
     .go();
 
