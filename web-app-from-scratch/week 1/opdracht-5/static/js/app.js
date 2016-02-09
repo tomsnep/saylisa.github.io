@@ -1,3 +1,5 @@
+// Samengewerkt met Senny & Melvin bij deze code
+
 // maak een namespace om conflicten te voorkomen
 var webApp = webApp || {}; 
 

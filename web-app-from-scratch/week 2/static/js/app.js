@@ -1,3 +1,5 @@
+// de code in webApp is gemaakt in samenwerking met Melvin en Senny
+
 // use strict modus aanzetten -> stuurt geen var door naar globale scope
 'use strict';
 
@@ -39,6 +41,7 @@ var webApp = webApp || {};
 })();
 
 
+// code in getData met hulp van microlibraries aja, routie en transparency 
 
 var getData = (function(){
     
