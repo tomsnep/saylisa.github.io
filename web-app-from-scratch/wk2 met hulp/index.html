@@ -1,0 +1,47 @@
+<!doctype html>
+
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+    <title>Web App from Scratch</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+
+<body>
+    <section id="nav">
+        <nav>
+            <ul>
+                <li><a href="#startscreen">Startscherm</a></li>
+                <li><a href="#musea">Musea in Parijs</a></li>
+            </ul>
+        </nav>
+    </section>
+
+    <section id="startscreen" class="togglesection">
+        <h1>startscherm hallo</h1>
+        <p>welkom welkom</p>
+    </section>
+
+    <section id="musea" class="togglesection">
+        <h1>Musea in Parijs</h1>
+        <div id="template">
+            <h2 data-bind="name"></h2>
+            <img src="" data-bind="image">
+            <span data-bind="url"></span>
+            <h3>Locatie:</h3>
+            <span data-bind="address"></span>
+            <span data-bind="coordinates"></span>
+        </div>
+    </section>
+
+</body>
+
+<script src="static/lib/routie.js"></script>
+<script src="static/lib/transparency.min.js"></script>
+<script src="static/lib/aja.min.js"></script>
+<script src="static/js/app.js"></script>
+
+</html>
