@@ -28,13 +28,14 @@ var webApp = webApp || {};
                 'musea': function () {
                     webApp.sections.toggle(window.location.hash);
                 },
-                'musea/:name': function(name){
-                    webApp.page.museaParis.init.aja();
+                'musea-detail/:name': function(name){
+                    webApp.sections.toggle(window.location.hash.slice(0,13));
+                    console.log(name);
+//                    console.log(name.replace(/-/g, " "));
                 },
                 '*': function () {
                     webApp.sections.toggle(window.location.hash);
                 }
-
             });
         }
     };
@@ -42,8 +43,7 @@ var webApp = webApp || {};
     // Object Literal sections
     webApp.sections = {
         toggle: function (route) {
-            var sections = document.querySelectorAll(".togglesection"),
-                route = window.location.hash;
+            var sections = document.querySelectorAll(".togglesection")
 
             for (var i = 0; i < sections.length; i++) {
                 // add inactive aan alle sections
@@ -53,8 +53,8 @@ var webApp = webApp || {};
                 if (!route) {
                     sections[0].classList.remove('inactive');
 
-                } else if (window.location.hash === "#" + sections[i].id) {
-                    sections[i].classList.remove('inactive');
+                } else {
+                    document.querySelector(route).classList.remove('inactive');
                 }
             }
         }
@@ -74,10 +74,15 @@ var webApp = webApp || {};
                                     src: function(){
                                         return this.image
                                     }
+                                },
+                                name: {
+                                    href: function(){
+                                        return '#musea-detail/' + this.name.replace(/ |, /g, '-')
+                                    } 
                                 }
                             };
+                        
                     
-                    console.log(name);
                     
                     console.log(json);
                     
