@@ -97,3 +97,7 @@ var webApp = webApp || {};
     webApp.app.init();
 
 })();
+// Tom Snepvangers
+// line 46: double quotes instead of single quotes
+// line 46, 75, 80: missing semicolons
+// line 89: too much spacing
